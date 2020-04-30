@@ -1,4 +1,4 @@
-const URL = "https://frederiket.dk/ca3";
+import { LoginURL } from "./Settings";
 
 function handleHttpErrors(res) {
   if (!res.ok) {
@@ -28,7 +28,7 @@ function authFacade() {
       username: user,
       password: password,
     });
-    return fetch(URL + "/api/login", options)
+    return fetch(LoginURL, options)
       .then(handleHttpErrors)
       .then((res) => {
         setToken(res.token);

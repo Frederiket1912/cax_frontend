@@ -1,4 +1,5 @@
 import facade from "./authFacade";
+import { TestFetchURL } from "./Settings";
 
 function apiFetchFacade() {
   function handleHttpErrors(res) {
@@ -10,9 +11,7 @@ function apiFetchFacade() {
 
   const getApiFetch = () => {
     const options = facade.makeOptions("GET", true);
-    return fetch("https://frederiket.dk/ca3/api/info/test", options).then(
-      handleHttpErrors
-    );
+    return fetch(TestFetchURL, options).then(handleHttpErrors);
   };
 
   return {

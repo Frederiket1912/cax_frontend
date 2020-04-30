@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Switch, Route, NavLink } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function App({ apiFetchFacade, authFacade }) {
   let token = localStorage.getItem("jwtToken");
@@ -65,6 +67,12 @@ function App({ apiFetchFacade, authFacade }) {
               <Custompage />
             </Route>
           )}
+          <Route path="/flightpage">
+            <Flightpage />
+          </Route>
+          <Route path="/hotelpage">
+            <HotelPage />
+          </Route>
           <Route>
             <NoMatch />
           </Route>
@@ -137,7 +145,16 @@ function Header({ role, loggedIn, logout }) {
                 </NavLink>
               </li>
             )}
-
+            <li>
+              <NavLink activeClassName="active" to="/flightpage">
+                Flights
+              </NavLink>
+            </li>
+            <li>
+              <NavLink activeClassName="active" to="/hotelpage">
+                Hotels
+              </NavLink>
+            </li>
             <li>
               <NavLink activeClassName="active" onClick={logout} to="/login">
                 Logout
@@ -209,6 +226,124 @@ function Custompage() {
   return (
     <div>
       <h2>Only admins can see this special and important message</h2>
+    </div>
+  );
+}
+
+function Flightpage() {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(
+    new Date().setDate(startDate.getDate() + 7)
+  );
+
+  const [fromAirport, setFromAirport] = useState("");
+  const [toAirport, setToAirport] = useState("");
+
+  const [peopleCount, setPeopleCount] = useState(1);
+
+  const incrementCount = () => {
+    setPeopleCount(peopleCount + 1);
+    return peopleCount;
+  };
+
+  const decrementCount = () => {
+    if (peopleCount === 1) return peopleCount;
+    setPeopleCount(peopleCount - 1);
+    return peopleCount;
+  };
+
+  return (
+    <div>
+      <div className="header">
+        <h2>Search for flights</h2>
+      </div>
+      <div className="div1">
+        <div className="flightsfrom">From : &nbsp;</div>
+        <div className="select1">
+          <select
+            value={fromAirport}
+            onChange={(e) => setFromAirport(e.currentTarget.value)}
+          >
+            <option value="Paris">Paris</option>
+            <option value="London">London</option>
+          </select>
+        </div>
+        <div className="flightsto">&nbsp;&nbsp; To : &nbsp;</div>
+        <div className="select2">
+          <select
+            value={toAirport}
+            onChange={(e) => setToAirport(e.currentTarget.value)}
+          >
+            <option value="Paris">Paris</option>
+            <option value="London">London</option>
+          </select>
+        </div>
+      </div>
+      <div className="div2">
+        <div className="date1">
+          Departure date:&nbsp;
+          <DatePicker
+            minDate={new Date()}
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+          />
+        </div>
+        <div className="date2">
+          Return date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <DatePicker
+            minDate={new Date()}
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+          />
+        </div>
+      </div>
+      <div className="counter">
+        Number of people : &nbsp;
+        <button onClick={incrementCount}>+</button>
+        &nbsp;{peopleCount}&nbsp;
+        <button onClick={decrementCount}>-</button>
+      </div>
+      <div className="flightbutton">
+        <button> Book Flight</button>
+      </div>
+    </div>
+  );
+}
+
+function HotelPage() {
+  const [hotelSearch, setHotelSearch] = useState("");
+
+  function handleSearchChange(e) {
+    setHotelSearch(e.target.value);
+  }
+
+  return (
+    <div>
+      <div className="header">
+        <h2>Hotels</h2>
+      </div>
+      <div className="searchbar">
+        <>
+          <label htmlFor="search">Search hotels by name :</label>&nbsp;
+          <input type="text" onChange={handleSearchChange}></input>
+        </>
+      </div>
+      <div className="outerdiv">
+        <div className="hotelpicture">
+          <img
+            src="https://pix6.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768"
+            alt=""
+            height="150"
+            width="150"
+          ></img>
+        </div>
+        <div className="hotelname">
+          <p>Name : {hotelSearch}</p>
+        </div>
+        <div className="hotelstars">
+          <p>Hotel Rating: 7.5</p>
+        </div>
+      </div>
     </div>
   );
 }
