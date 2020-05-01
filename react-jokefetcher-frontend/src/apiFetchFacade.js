@@ -14,8 +14,14 @@ function apiFetchFacade() {
     return fetch(TestFetchURL, options).then(handleHttpErrors);
   };
 
+  const getApiFetch2 = (Body, url) => {
+    const options = facade.makeOptions("POST", true, Body);
+    return fetch(url, options).then(handleHttpErrors);
+  };
+
   return {
     getApiFetch,
+    getApiFetch2,
   };
 }
 

@@ -4,6 +4,7 @@ import { Switch, Route, NavLink, useHistory } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { SearchFlightsURL, SearchHotelsURL } from "./Settings";
 
 function App({ apiFetchFacade, authFacade }) {
   let token = localStorage.getItem("jwtToken");
@@ -19,6 +20,54 @@ function App({ apiFetchFacade, authFacade }) {
     setLoggedIn(false);
     updateRoles();
   };
+  //Fri May 01 2020 11:15:52 GMT+0200 (Central European Summer Time)
+  function dateFormatter(date) {
+    let month = date.toString().substring(4, 7);
+    const day = date.toString().substring(8, 10);
+    const year = date.toString().substring(11, 15);
+
+    switch (month) {
+      case "Jan":
+        month = "01";
+        break;
+      case "Feb":
+        month = "02";
+        break;
+      case "Mar":
+        month = "03";
+        break;
+      case "Apr":
+        month = "04";
+        break;
+      case "May":
+        month = "05";
+        break;
+      case "Jun":
+        month = "06";
+        break;
+      case "Jul":
+        month = "07";
+        break;
+      case "Aug":
+        month = "08";
+        break;
+      case "Sep":
+        month = "09";
+        break;
+      case "Oct":
+        month = "10";
+        break;
+      case "Nov":
+        month = "11";
+        break;
+      case "Dec":
+        month = "12";
+        break;
+      default:
+        console.log("Something went wrong with reading the month");
+    }
+    return year + "-" + month + "-" + day;
+  }
 
   const login = (user, pass) => {
     authFacade
@@ -70,10 +119,13 @@ function App({ apiFetchFacade, authFacade }) {
             </Route>
           )}
           <Route path="/flightpage">
-            <Flightpage />
+            <Flightpage
+              dateFormatter={dateFormatter}
+              apiFetchFacade={apiFetchFacade}
+            />
           </Route>
           <Route path="/hotelpage">
-            <HotelPage />
+            <HotelPage apiFetchFacade={apiFetchFacade} />
           </Route>
           <Route>
             <NoMatch />
@@ -232,16 +284,24 @@ function Custompage() {
   );
 }
 
-function Flightpage() {
+function Flightpage({ apiFetchFacade, dateFormatter }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(
     new Date().setDate(startDate.getDate() + 7)
   );
 
-  const [fromAirport, setFromAirport] = useState("");
-  const [toAirport, setToAirport] = useState("");
+  const plus7 = new Date().setDate(startDate.getDate() + 7);
+  const [startFormatDate, setStartFormatDate] = useState(
+    dateFormatter(startDate)
+  );
+  const [endFormatDate, setEndFormatDate] = useState();
+
+  const [fromAirport, setFromAirport] = useState("lond");
+  const [toAirport, setToAirport] = useState("pari");
 
   const [peopleCount, setPeopleCount] = useState(1);
+
+  const [flights, SetFlights] = useState();
 
   const incrementCount = () => {
     setPeopleCount(peopleCount + 1);
@@ -252,6 +312,34 @@ function Flightpage() {
     if (peopleCount === 1) return peopleCount;
     setPeopleCount(peopleCount - 1);
     return peopleCount;
+  };
+
+  const handleSearch = () => {
+    const body = {
+      destinationplace: toAirport,
+      originplace: fromAirport,
+      outbounddate: startFormatDate,
+      inbounddate: endFormatDate,
+    };
+
+    const url = SearchFlightsURL;
+    apiFetchFacade()
+      .getApiFetch2(body, url)
+      .then((data) => {
+        SetFlights({ ...data });
+      });
+  };
+
+  console.log(flights);
+
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    setStartFormatDate(dateFormatter(date));
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    setEndFormatDate(dateFormatter(date));
   };
 
   return (
@@ -266,8 +354,8 @@ function Flightpage() {
             value={fromAirport}
             onChange={(e) => setFromAirport(e.currentTarget.value)}
           >
-            <option value="pari">Paris</option>
             <option value="lond">London</option>
+            <option value="pari">Paris</option>
           </select>
         </div>
         <div className="flightsto">&nbsp;&nbsp; To : &nbsp;</div>
@@ -287,7 +375,8 @@ function Flightpage() {
           <DatePicker
             minDate={new Date()}
             selected={startDate}
-            onChange={(date) => setStartDate(date)}
+            dateFormat="yyyy-MM-dd"
+            onChange={(date) => handleStartDateChange(date)}
           />
         </div>
         <div className="date2">
@@ -295,7 +384,8 @@ function Flightpage() {
           <DatePicker
             minDate={new Date()}
             selected={endDate}
-            onChange={(date) => setEndDate(date)}
+            dateFormat="yyyy-MM-dd"
+            onChange={(date) => handleEndDateChange(date)}
           />
         </div>
       </div>
@@ -306,14 +396,31 @@ function Flightpage() {
         <button onClick={incrementCount}>+</button>
       </div>
       <div className="flightbutton">
-        <button> Search Flights</button>
+        <button onClick={handleSearch}> Search Flights</button>
       </div>
     </div>
   );
 }
 
-function HotelPage() {
+function HotelPage({ apiFetchFacade }) {
   const [hotelSearch, setHotelSearch] = useState("");
+  const [hotels, setHotels] = useState();
+
+  const handleSearch = () => {
+    const body = {
+      checkIn: "2020-01-08",
+      checkOut: "2020-01-15",
+      adults1: "1",
+    };
+    const url = SearchHotelsURL;
+    apiFetchFacade()
+      .getApiFetch2(body, url)
+      .then((data) => {
+        setHotels({ ...data });
+      });
+  };
+
+  console.log(hotels);
 
   function handleSearchChange(e) {
     setHotelSearch(e.target.value);
@@ -346,6 +453,7 @@ function HotelPage() {
           <p>Hotel Rating: 7.5</p>
         </div>
       </div>
+      <button onClick={handleSearch}> Search Hotels</button>
     </div>
   );
 }

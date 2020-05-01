@@ -14,7 +14,8 @@
     "react-dom": "^16.13.1",
     "react-dropdown": "^1.7.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "react-substring": "^0.1.6"
   },
   "scripts": {
     "start": "react-scripts start",
