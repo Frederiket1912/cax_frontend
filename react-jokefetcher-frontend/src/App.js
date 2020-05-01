@@ -264,8 +264,8 @@ function Flightpage() {
             value={fromAirport}
             onChange={(e) => setFromAirport(e.currentTarget.value)}
           >
-            <option value="Paris">Paris</option>
-            <option value="London">London</option>
+            <option value="pari">Paris</option>
+            <option value="lond">London</option>
           </select>
         </div>
         <div className="flightsto">&nbsp;&nbsp; To : &nbsp;</div>
@@ -274,8 +274,8 @@ function Flightpage() {
             value={toAirport}
             onChange={(e) => setToAirport(e.currentTarget.value)}
           >
-            <option value="Paris">Paris</option>
-            <option value="London">London</option>
+            <option value="pari">Paris</option>
+            <option value="lond">London</option>
           </select>
         </div>
       </div>
@@ -299,12 +299,12 @@ function Flightpage() {
       </div>
       <div className="counter">
         Number of people : &nbsp;
-        <button onClick={incrementCount}>+</button>
-        &nbsp;{peopleCount}&nbsp;
         <button onClick={decrementCount}>-</button>
+        &nbsp;{peopleCount}&nbsp;
+        <button onClick={incrementCount}>+</button>
       </div>
       <div className="flightbutton">
-        <button> Book Flight</button>
+        <button> Search Flights</button>
       </div>
     </div>
   );
