@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Switch, Route, NavLink } from "react-router-dom";
+import { Switch, Route, NavLink, useHistory } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,6 +12,7 @@ function App({ apiFetchFacade, authFacade }) {
     token !== undefined && token !== null
   );
   const [role, setRole] = useState("");
+  const history = useHistory();
 
   const logout = () => {
     authFacade.logout();
@@ -27,6 +28,7 @@ function App({ apiFetchFacade, authFacade }) {
       .catch((res) =>
         alert("Status code : " + res.status + " Wrong username or password.")
       );
+    history.push("/");
   };
 
   function updateRoles() {
