@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Switch, Route, NavLink, useHistory } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { SearchFlightsURL, SearchHotelsURL } from "./Settings";
+import HotelPage from "./hotel-page";
+import FlightPage from "./flight-page";
 
 function App({ apiFetchFacade, authFacade }) {
   let token = localStorage.getItem("jwtToken");
@@ -20,54 +20,6 @@ function App({ apiFetchFacade, authFacade }) {
     setLoggedIn(false);
     updateRoles();
   };
-  //Fri May 01 2020 11:15:52 GMT+0200 (Central European Summer Time)
-  function dateFormatter(date) {
-    let month = date.toString().substring(4, 7);
-    const day = date.toString().substring(8, 10);
-    const year = date.toString().substring(11, 15);
-
-    switch (month) {
-      case "Jan":
-        month = "01";
-        break;
-      case "Feb":
-        month = "02";
-        break;
-      case "Mar":
-        month = "03";
-        break;
-      case "Apr":
-        month = "04";
-        break;
-      case "May":
-        month = "05";
-        break;
-      case "Jun":
-        month = "06";
-        break;
-      case "Jul":
-        month = "07";
-        break;
-      case "Aug":
-        month = "08";
-        break;
-      case "Sep":
-        month = "09";
-        break;
-      case "Oct":
-        month = "10";
-        break;
-      case "Nov":
-        month = "11";
-        break;
-      case "Dec":
-        month = "12";
-        break;
-      default:
-        console.log("Something went wrong with reading the month");
-    }
-    return year + "-" + month + "-" + day;
-  }
 
   const login = (user, pass) => {
     authFacade
@@ -119,13 +71,10 @@ function App({ apiFetchFacade, authFacade }) {
             </Route>
           )}
           <Route path="/flightpage">
-            <Flightpage
-              dateFormatter={dateFormatter}
-              apiFetchFacade={apiFetchFacade}
-            />
+            <FlightPage />
           </Route>
           <Route path="/hotelpage">
-            <HotelPage apiFetchFacade={apiFetchFacade} />
+            <HotelPage />
           </Route>
           <Route>
             <NoMatch />
@@ -280,180 +229,6 @@ function Custompage() {
   return (
     <div>
       <h2>Only admins can see this special and important message</h2>
-    </div>
-  );
-}
-
-function Flightpage({ apiFetchFacade, dateFormatter }) {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(
-    new Date().setDate(startDate.getDate() + 7)
-  );
-
-  const plus7 = new Date().setDate(startDate.getDate() + 7);
-  const [startFormatDate, setStartFormatDate] = useState(
-    dateFormatter(startDate)
-  );
-  const [endFormatDate, setEndFormatDate] = useState();
-
-  const [fromAirport, setFromAirport] = useState("lond");
-  const [toAirport, setToAirport] = useState("pari");
-
-  const [peopleCount, setPeopleCount] = useState(1);
-
-  const [flights, SetFlights] = useState();
-
-  const incrementCount = () => {
-    setPeopleCount(peopleCount + 1);
-    return peopleCount;
-  };
-
-  const decrementCount = () => {
-    if (peopleCount === 1) return peopleCount;
-    setPeopleCount(peopleCount - 1);
-    return peopleCount;
-  };
-
-  const handleSearch = () => {
-    const body = {
-      destinationplace: toAirport,
-      originplace: fromAirport,
-      outbounddate: startFormatDate,
-      inbounddate: endFormatDate,
-    };
-
-    const url = SearchFlightsURL;
-    apiFetchFacade()
-      .getApiFetch2(body, url)
-      .then((data) => {
-        SetFlights({ ...data });
-      });
-  };
-
-  console.log(flights);
-
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    setStartFormatDate(dateFormatter(date));
-  };
-
-  const handleEndDateChange = (date) => {
-    setEndDate(date);
-    setEndFormatDate(dateFormatter(date));
-  };
-
-  return (
-    <div>
-      <div className="header">
-        <h2>Search for flights</h2>
-      </div>
-      <div className="div1">
-        <div className="flightsfrom">From : &nbsp;</div>
-        <div className="select1">
-          <select
-            value={fromAirport}
-            onChange={(e) => setFromAirport(e.currentTarget.value)}
-          >
-            <option value="lond">London</option>
-            <option value="pari">Paris</option>
-          </select>
-        </div>
-        <div className="flightsto">&nbsp;&nbsp; To : &nbsp;</div>
-        <div className="select2">
-          <select
-            value={toAirport}
-            onChange={(e) => setToAirport(e.currentTarget.value)}
-          >
-            <option value="pari">Paris</option>
-            <option value="lond">London</option>
-          </select>
-        </div>
-      </div>
-      <div className="div2">
-        <div className="date1">
-          Departure date:&nbsp;
-          <DatePicker
-            minDate={new Date()}
-            selected={startDate}
-            dateFormat="yyyy-MM-dd"
-            onChange={(date) => handleStartDateChange(date)}
-          />
-        </div>
-        <div className="date2">
-          Return date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <DatePicker
-            minDate={new Date()}
-            selected={endDate}
-            dateFormat="yyyy-MM-dd"
-            onChange={(date) => handleEndDateChange(date)}
-          />
-        </div>
-      </div>
-      <div className="counter">
-        Number of people : &nbsp;
-        <button onClick={decrementCount}>-</button>
-        &nbsp;{peopleCount}&nbsp;
-        <button onClick={incrementCount}>+</button>
-      </div>
-      <div className="flightbutton">
-        <button onClick={handleSearch}> Search Flights</button>
-      </div>
-    </div>
-  );
-}
-
-function HotelPage({ apiFetchFacade }) {
-  const [hotelSearch, setHotelSearch] = useState("");
-  const [hotels, setHotels] = useState();
-
-  const handleSearch = () => {
-    const body = {
-      checkIn: "2020-01-08",
-      checkOut: "2020-01-15",
-      adults1: "1",
-    };
-    const url = SearchHotelsURL;
-    apiFetchFacade()
-      .getApiFetch2(body, url)
-      .then((data) => {
-        setHotels({ ...data });
-      });
-  };
-
-  console.log(hotels);
-
-  function handleSearchChange(e) {
-    setHotelSearch(e.target.value);
-  }
-
-  return (
-    <div>
-      <div className="header">
-        <h2>Hotels</h2>
-      </div>
-      <div className="searchbar">
-        <>
-          <label htmlFor="search">Search hotels by name :</label>&nbsp;
-          <input type="text" onChange={handleSearchChange}></input>
-        </>
-      </div>
-      <div className="outerdiv">
-        <div className="hotelpicture">
-          <img
-            src="https://pix6.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?s=1024x768"
-            alt=""
-            height="150"
-            width="150"
-          ></img>
-        </div>
-        <div className="hotelname">
-          <p>Name : {hotelSearch}</p>
-        </div>
-        <div className="hotelstars">
-          <p>Hotel Rating: 7.5</p>
-        </div>
-      </div>
-      <button onClick={handleSearch}> Search Hotels</button>
     </div>
   );
 }
