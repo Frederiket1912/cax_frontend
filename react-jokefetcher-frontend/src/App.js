@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import { Switch, Route, NavLink, useHistory } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import "react-datepicker/dist/react-datepicker.css";
 import HotelPage from "./hotel-page";
 import FlightPage from "./flight-page";
+import hotelimg from "./images/hotel.png";
+import planeimg from "./images/plane.png";
 
 function App({ apiFetchFacade, authFacade }) {
   let token = localStorage.getItem("jwtToken");
@@ -58,7 +59,7 @@ function App({ apiFetchFacade, authFacade }) {
       {loggedIn && (
         <Switch>
           <Route exact path="/">
-            <Home token={token} />
+            <Home history={history} token={token} />
           </Route>
           {role && role.includes("user") && (
             <Route path="/fetch">
@@ -205,12 +206,21 @@ function Home(props) {
     <div>
       {role !== "" && (
         <div>
-          <h2>
-            Welcome {username} you're logged in with the role: {role}
-          </h2>
           <a href="https://github.com/Frederiket1912/ca3_startcode_backend/blob/master/README.md">
             How to use backend and frontend startcode
           </a>
+          <div class="row">
+            <a href="/hotelpage">
+              <div class="column">
+                <img src={hotelimg} alt="Hotel"></img>
+              </div>
+            </a>
+            <div class="column">
+              <a href="/flightpage">
+                <img src={planeimg} alt="Plane"></img>
+              </a>
+            </div>
+          </div>
         </div>
       )}
       {role === "" && (

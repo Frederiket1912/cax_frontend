@@ -1,0 +1,119 @@
+.header2 {
+  font-size: 35px;
+  text-align: center;
+}
+.searchbar {
+  margin-top: 20px;
+  float: right;
+  margin-right: 20px;
+}
+.header2 a {
+  margin-top: 20px;
+  color: black;
+}
+.column {
+  float: left;
+  width: 50%;
+}
+img {
+  display: block;
+  width: 500px;
+  height: 450px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.div1 {
+  text-align: center;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+.flightsfrom {
+  font-size: 1em;
+  width: max-content;
+
+  padding: 10px;
+}
+.select1 {
+  padding: 10px;
+}
+.select2 {
+  padding: 10px;
+}
+.flightsto {
+  font-size: 1em;
+
+  width: max-content;
+  padding: 10px;
+}
+.div2 {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  width: max-content;
+  text-align: center;
+  margin-top: 5px;
+}
+.date1 {
+  float: left;
+  width: max-content;
+  padding-right: 20px;
+}
+.date2 {
+  float: left;
+  width: max-content;
+  padding-right: 20px;
+}
+.counter {
+  margin-top: 10px;
+  text-align: center;
+}
+.flightbutton {
+  margin-top: 10px;
+  text-align: center;
+}
+select {
+  font-size: 1em;
+}
+.outerdiv {
+  margin-top: 5%;
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: auto;
+  margin-left: auto;
+  box-sizing: border-box;
+}
+.hotelpicture {
+  box-sizing: border-box;
+  width: 255px;
+  height: 144px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+.container {
+  /*border-width: 1px;
+     border: rgb(88, 88, 88);
+     border-style: solid;*/
+  background: #fff;
+  margin: 4px;
+  padding: 2px;
+  box-shadow: 5px 5px 5px 5px #888888;
+}
+
+.hotelname {
+}
+.hotelstars {
+  color: bisque;
+}
+
+body {
+  background-image: url("./images/back0.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

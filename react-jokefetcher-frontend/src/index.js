@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "./frontpage.css";
 import App from "./App";
 import apiFetchFacade from "./apiFetchFacade";
 import authFacade from "./authFacade";

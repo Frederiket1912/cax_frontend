@@ -60,31 +60,39 @@ function FlightPage() {
     setEndFormatDate(dateFormatter(date));
   };
 
+  const divStyle = {
+    display: "flex",
+  };
+
   return (
     <div>
-      <div className="header">
+      <div className="header2">
         <h2>Search for flights</h2>
       </div>
       <div className="div1">
-        <div className="flightsfrom">From : &nbsp;</div>
-        <div className="select1">
-          <select
-            value={fromAirport}
-            onChange={(e) => setFromAirport(e.currentTarget.value)}
-          >
-            <option value="lond">London</option>
-            <option value="pari">Paris</option>
-          </select>
+        <div style={divStyle}>
+          <div className="flightsfrom">From :</div>
+          <div className="select1">
+            <select
+              value={fromAirport}
+              onChange={(e) => setFromAirport(e.currentTarget.value)}
+            >
+              <option value="lond">London</option>
+              <option value="pari">Paris</option>
+            </select>
+          </div>
         </div>
-        <div className="flightsto">&nbsp;&nbsp; To : &nbsp;</div>
-        <div className="select2">
-          <select
-            value={toAirport}
-            onChange={(e) => setToAirport(e.currentTarget.value)}
-          >
-            <option value="pari">Paris</option>
-            <option value="lond">London</option>
-          </select>
+        <div style={divStyle}>
+          <div className="flightsto">&nbsp;&nbsp; To : &nbsp; </div>
+          <div className="select2">
+            <select
+              value={toAirport}
+              onChange={(e) => setToAirport(e.currentTarget.value)}
+            >
+              <option value="pari">Paris</option>
+              <option value="lond">London</option>
+            </select>
+          </div>
         </div>
       </div>
       <div className="div2">
