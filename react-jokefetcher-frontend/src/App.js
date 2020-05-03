@@ -61,11 +61,6 @@ function App({ apiFetchFacade, authFacade }) {
           <Route exact path="/">
             <Home history={history} token={token} />
           </Route>
-          {role && role.includes("user") && (
-            <Route path="/fetch">
-              <ApiFetch apiFetchFacade={apiFetchFacade} />
-            </Route>
-          )}
           {role && role.includes("admin") && (
             <Route path="/custompage">
               <Custompage />
@@ -142,13 +137,6 @@ function Header({ role, loggedIn, logout }) {
                 </NavLink>
               </li>
             )}
-            {role !== null && role.includes("user") && (
-              <li>
-                <NavLink activeClassName="active" to="/fetch">
-                  Api Fetch
-                </NavLink>
-              </li>
-            )}
             <li>
               <NavLink activeClassName="active" to="/flightpage">
                 Flights
@@ -206,18 +194,30 @@ function Home(props) {
     <div>
       {role !== "" && (
         <div>
-          <a href="https://github.com/Frederiket1912/ca3_startcode_backend/blob/master/README.md">
-            How to use backend and frontend startcode
-          </a>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
           <div class="row">
             <a href="/hotelpage">
               <div class="column">
-                <img src={hotelimg} alt="Hotel"></img>
+                <img
+                  className="frontpagepicture"
+                  src={hotelimg}
+                  alt="Hotel"
+                ></img>
               </div>
             </a>
             <div class="column">
               <a href="/flightpage">
-                <img src={planeimg} alt="Plane"></img>
+                <img
+                  className="frontpagepicture"
+                  src={planeimg}
+                  alt="Plane"
+                ></img>
               </a>
             </div>
           </div>
@@ -239,68 +239,6 @@ function Custompage() {
   return (
     <div>
       <h2>Only admins can see this special and important message</h2>
-    </div>
-  );
-}
-
-function Table(props) {
-  if (
-    props === undefined ||
-    props === null ||
-    props.scanner === undefined ||
-    props.scanner.Places === undefined
-  )
-    return <></>;
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>PlaceId</th>
-          <th>PlaceName</th>
-          <th>CountryId</th>
-        </tr>
-      </thead>
-      <tbody>{props.scanner.Places.map((place) => DisplayPlace(place))}</tbody>
-    </table>
-  );
-}
-
-function DisplayPlace(place) {
-  return (
-    <tr key={place.PlaceId}>
-      <td>{place.PlaceId}</td>
-      <td>{place.PlaceName}</td>
-      <td>{place.CountryId}</td>
-    </tr>
-  );
-}
-
-function ApiFetch({ apiFetchFacade }) {
-  const [ca3fetch, setCa3fetch] = useState([]);
-
-  useEffect(() => {
-    apiFetchFacade()
-      .getApiFetch()
-      .then((data) => {
-        setCa3fetch({ ...data });
-      });
-  }, [apiFetchFacade]);
-
-  return (
-    <div>
-      <ul>
-        <li>Chuck joke : {ca3fetch.chuckJoke}</li>
-        <li>Chuck joke url : {ca3fetch.chuckJokeURL}</li>
-        <li>Dad joke : {ca3fetch.dadJoke}</li>
-        <li>Dad joke url : {ca3fetch.dadJokeURL}</li>
-        <li>API Weather URL: {ca3fetch.weatherURL}</li>
-        <li>API Weather timezone: {ca3fetch.weatherTimezone}</li>
-        <Table scanner={ca3fetch.scanner} />
-        <li>
-          Dog Message :{" "}
-          <img src={ca3fetch.dogDTOMessage} alt={ca3fetch.dogDTOMessage}></img>
-        </li>
-      </ul>
     </div>
   );
 }
