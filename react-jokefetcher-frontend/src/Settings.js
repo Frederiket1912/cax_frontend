@@ -13,6 +13,6 @@ export const AdminRegistrationURL =
 export const SupportRegistrationURL =
   "http://localhost:8080/cax/api/register/support";
 
-export const CreateOrderURL = "TODO";
+export const CreateOrderURL = "http://localhost:8080/cax/api/order/create";
 
 export const GetOrderHistoryURL = "TODO";

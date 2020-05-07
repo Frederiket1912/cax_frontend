@@ -21,6 +21,7 @@ function authFacade() {
   };
   const logout = () => {
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("username");
   };
 
   const login = (user, password) => {
@@ -28,6 +29,7 @@ function authFacade() {
       username: user,
       password: password,
     });
+    localStorage.setItem("username", user);
     return fetch(LoginURL, options)
       .then(handleHttpErrors)
       .then((res) => {
