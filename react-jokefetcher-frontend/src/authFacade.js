@@ -1,4 +1,4 @@
-import { LoginURL } from "./Settings";
+import { LoginURL } from "./settings";
 
 function handleHttpErrors(res) {
   if (!res.ok) {

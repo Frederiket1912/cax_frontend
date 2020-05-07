@@ -1,8 +1,9 @@
 import DatePicker from "react-datepicker";
-import React, { useState } from "react";
-import { SearchFlightsURL } from "./Settings";
+import React, { useState, useCallback, useContext } from "react";
+import { SearchFlightsURL } from "./settings";
 import { dateFormatter } from "./date-helper";
 import apiFetchFacade from "./apiFetchFacade";
+import { CartContext } from "./cart-context";
 
 function FlightPage() {
   const [startDate, setStartDate] = useState(new Date());
@@ -20,7 +21,10 @@ function FlightPage() {
 
   const [peopleCount, setPeopleCount] = useState(1);
 
-  const [flights, SetFlights] = useState();
+  const [flights, setFlights] = useState();
+  const [carriers, setCarriers] = useState();
+  const [places, setPlaces] = useState();
+  const [quotes, setQuotes] = useState();
 
   const incrementCount = () => {
     setPeopleCount(peopleCount + 1);
@@ -33,7 +37,7 @@ function FlightPage() {
     return peopleCount;
   };
 
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     const body = {
       destinationplace: toAirport,
       originplace: fromAirport,
@@ -45,10 +49,16 @@ function FlightPage() {
     apiFetchFacade()
       .getApiFetch2(body, url)
       .then((data) => {
-        SetFlights({ ...data });
+        setFlights({ ...data });
+        setCarriers({ ...data.Carriers });
+        setPlaces({ ...data.Places });
+        setQuotes({ ...data.Quotes });
         console.log(data);
+        console.log(carriers);
+        //console.log(places);
+        //console.log(quotes);
       });
-  };
+  });
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -124,7 +134,104 @@ function FlightPage() {
       <div className="flightbutton">
         <button onClick={handleSearch}> Search Flights</button>
       </div>
+      <div className="flightData"></div>
+      {flights !== undefined &&
+        flights !== null &&
+        flights.Quotes !== undefined &&
+        flights.Quotes.length > 0 &&
+        carriers !== undefined &&
+        carriers !== null &&
+        places !== null &&
+        places !== undefined &&
+        quotes !== null &&
+        quotes !== undefined && (
+          <div>
+            <table className="flight-table">
+              <thead>
+                <tr>
+                  <th>Inbound Carrier</th>
+                  <th>Inbound Flight Portal</th>
+                  <th>Direct Flight</th>
+                  <th>Outbound Carrier</th>
+                  <th>Outbound Flight Portal</th>
+                  <th>Price</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {flights.Quotes.map((place) => (
+                  <DisplayFlight
+                    key={place.QuoteId}
+                    place={place}
+                    places={places}
+                    quotes={quotes}
+                    flights={flights}
+                    carriers={carriers}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
     </div>
+  );
+}
+
+function DisplayFlight({ place, places, quotes, flights, carriers }) {
+  const { cart, setCart } = useContext(CartContext);
+  function FindCarrier(carrierId) {
+    if (carriers === undefined && carriers === null) return undefined;
+    for (var i = 0; i < Object.keys(carriers).length; i++) {
+      if (carriers[i].CarrierId === carrierId) {
+        return carriers[i].Name;
+      }
+    }
+  }
+
+  function FindFlightPortal(placeId) {
+    if (places === undefined && places === null) return undefined;
+    for (var i = 0; i < Object.keys(places).length; i++) {
+      if (places[i].PlaceId === placeId) {
+        //console.log("Flight Portal Name Match:" + flightPortalMatch[0].Name);
+        return places[i].Name;
+      }
+    }
+  }
+
+  const addToCart = useCallback(
+    (place) => {
+      let newCart = [];
+
+      newCart = newCart.concat(cart);
+      newCart.push({
+        price: place.MinPrice,
+        name: "name",
+        service: "service",
+      });
+      setCart(newCart);
+    },
+    [cart]
+  );
+
+  if (
+    flights === undefined &&
+    flights === null &&
+    quotes === null &&
+    quotes === undefined
+  )
+    return <></>;
+  return (
+    <tr key="">
+      <td>{FindCarrier(place.InboundLeg.CarrierIds[0])}</td>
+      <td>{FindFlightPortal(place.InboundLeg.DestinationId)}</td>
+      <td>{place.Direct ? "true" : "false"}</td>
+      <td>{FindCarrier(place.OutboundLeg.CarrierIds[0])}</td>
+      <td>{FindFlightPortal(place.OutboundLeg.DestinationId)}</td>
+      <td>{place.MinPrice}</td>
+      <td>
+        <button onClick={() => addToCart(place)}>Add to cart</button>
+      </td>
+    </tr>
   );
 }
 

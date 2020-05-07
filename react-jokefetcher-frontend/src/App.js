@@ -4,8 +4,12 @@ import jwt_decode from "jwt-decode";
 import "react-datepicker/dist/react-datepicker.css";
 import HotelPage from "./hotel-page";
 import FlightPage from "./flight-page";
+import UserRegistrationPage from "./userregister";
+import ShoppingCartPage from "./shopping-cart";
+import OrderHistoryPage from "./order-history";
 import hotelimg from "./images/hotel.png";
 import planeimg from "./images/plane.png";
+import { CartContext, CartContextProvider } from "./cart-context";
 
 function App({ apiFetchFacade, authFacade }) {
   let token = localStorage.getItem("jwtToken");
@@ -15,6 +19,7 @@ function App({ apiFetchFacade, authFacade }) {
   );
   const [role, setRole] = useState("");
   const history = useHistory();
+  const theme = useState();
 
   const logout = () => {
     authFacade.logout();
@@ -54,40 +59,52 @@ function App({ apiFetchFacade, authFacade }) {
 
   console.log(role);
   return (
-    <div className="App">
-      <Header loggedIn={loggedIn} role={role} logout={logout} />
-      {loggedIn && (
-        <Switch>
-          <Route exact path="/">
-            <Home history={history} token={token} />
-          </Route>
-          {role && role.includes("admin") && (
-            <Route path="/custompage">
-              <Custompage />
+    <CartContextProvider>
+      <div className="App">
+        <Header loggedIn={loggedIn} role={role} logout={logout} />
+
+        {loggedIn && (
+          <Switch>
+            <Route exact path="/">
+              <Home history={history} token={token} />
             </Route>
-          )}
-          <Route path="/flightpage">
-            <FlightPage />
-          </Route>
-          <Route path="/hotelpage">
-            <HotelPage />
-          </Route>
-          <Route>
-            <NoMatch />
-          </Route>
-        </Switch>
-      )}
-      {!loggedIn && (
-        <Switch>
-          <Route path="/login">
-            <LogIn login={login} />
-          </Route>
-          <Route>
-            <Home token={token} />
-          </Route>
-        </Switch>
-      )}
-    </div>
+            {role && role.includes("admin") && (
+              <Route path="/custompage">
+                <Custompage />
+              </Route>
+            )}
+            <Route path="/flightpage">
+              <FlightPage />
+            </Route>
+            <Route path="/hotelpage">
+              <HotelPage apiFetchFacade={apiFetchFacade} />
+            </Route>
+            <Route path="/shoppingcart">
+              <ShoppingCartPage apiFetchFacade={apiFetchFacade} />
+            </Route>
+            <Route path="/orderhistory">
+              <OrderHistoryPage apiFetchFacade={apiFetchFacade} />
+            </Route>
+            <Route>
+              <NoMatch />
+            </Route>
+          </Switch>
+        )}
+        {!loggedIn && (
+          <Switch>
+            <Route path="/login">
+              <LogIn login={login} />
+            </Route>
+            <Route path="/registration">
+              <UserRegistrationPage apiFetchFacade={apiFetchFacade} />
+            </Route>
+            <Route>
+              <Home token={token} />
+            </Route>
+          </Switch>
+        )}
+      </div>
+    </CartContextProvider>
   );
 }
 
@@ -148,17 +165,34 @@ function Header({ role, loggedIn, logout }) {
               </NavLink>
             </li>
             <li>
+              <NavLink activeClassName="active" to="/shoppingcart">
+                Shopping Cart
+              </NavLink>
+            </li>
+            <li>
+              <NavLink activeClassName="active" to="/orderhistory">
+                Order History
+              </NavLink>
+            </li>
+            <li>
               <NavLink activeClassName="active" onClick={logout} to="/login">
                 Logout
               </NavLink>
             </li>
           </>
         ) : (
-          <li>
-            <NavLink activeClassName="active" to="/login">
-              Login
-            </NavLink>
-          </li>
+          <>
+            <li>
+              <NavLink activeClassName="active" to="/login">
+                Login
+              </NavLink>
+            </li>
+            <li>
+              <NavLink activeClassName="active" to="/registration">
+                Register
+              </NavLink>
+            </li>
+          </>
         )}
       </ul>
     </div>
@@ -201,9 +235,9 @@ function Home(props) {
           <br></br>
           <br></br>
           <br></br>
-          <div class="row">
+          <div className="row">
             <a href="/hotelpage">
-              <div class="column">
+              <div className="column">
                 <img
                   className="frontpagepicture"
                   src={hotelimg}
@@ -211,7 +245,7 @@ function Home(props) {
                 ></img>
               </div>
             </a>
-            <div class="column">
+            <div className="column">
               <a href="/flightpage">
                 <img
                   className="frontpagepicture"

@@ -108,14 +108,19 @@ img.smallhotelpicture {
   margin: 4px;
   padding: 2px;
   box-shadow: 5px 5px 5px 5px #888888;
+  width: 255px;
+  height: 248px;
 }
 
 .hotelname {
   padding-left: 5px;
+  height: 42px;
+  width: 250px;
 }
 .hotelstars {
   color: bisque;
   padding-left: 5px;
+  padding-top: 15px;
 }
 
 body {

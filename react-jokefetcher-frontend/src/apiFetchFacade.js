@@ -1,5 +1,4 @@
 import facade from "./authFacade";
-import { TestFetchURL } from "./Settings";
 
 function apiFetchFacade() {
   function handleHttpErrors(res) {
@@ -9,9 +8,9 @@ function apiFetchFacade() {
     return res.json();
   }
 
-  const getApiFetch = () => {
+  const getApiFetch = (url) => {
     const options = facade.makeOptions("GET", true);
-    return fetch(TestFetchURL, options).then(handleHttpErrors);
+    return fetch(url, options).then(handleHttpErrors);
   };
 
   const getApiFetch2 = (Body, url) => {
@@ -19,9 +18,15 @@ function apiFetchFacade() {
     return fetch(url, options).then(handleHttpErrors);
   };
 
+  const getApiFetch3 = (url) => {
+    const options = facade.makeOptions("POST", true);
+    return fetch(url, options).then(handleHttpErrors);
+  };
+
   return {
     getApiFetch,
     getApiFetch2,
+    getApiFetch3,
   };
 }
 
