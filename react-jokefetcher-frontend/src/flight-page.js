@@ -167,6 +167,9 @@ function FlightPage() {
                     quotes={quotes}
                     flights={flights}
                     carriers={carriers}
+                    startFormatDate={startFormatDate}
+                    endFormatDate={endFormatDate}
+                    peopleCount={peopleCount}
                   />
                 ))}
               </tbody>
@@ -177,7 +180,16 @@ function FlightPage() {
   );
 }
 
-function DisplayFlight({ place, places, quotes, flights, carriers }) {
+function DisplayFlight({
+  place,
+  places,
+  quotes,
+  flights,
+  carriers,
+  startFormatDate,
+  endFormatDate,
+  peopleCount,
+}) {
   const { cart, setCart } = useContext(CartContext);
   function FindCarrier(carrierId) {
     if (carriers === undefined && carriers === null) return undefined;
@@ -199,14 +211,17 @@ function DisplayFlight({ place, places, quotes, flights, carriers }) {
   }
 
   const addToCart = useCallback(
-    (place) => {
+    (place, inBountName, outBoundName) => {
       let newCart = [];
 
       newCart = newCart.concat(cart);
       newCart.push({
-        price: place.MinPrice,
-        name: "name",
-        service: "service",
+        service: "flight",
+        name: inBountName + "-" + outBoundName,
+        dateIn: startFormatDate,
+        dateOut: endFormatDate,
+        price: place.MinPrice * peopleCount,
+        adults: peopleCount,
       });
       setCart(newCart);
     },
@@ -220,16 +235,21 @@ function DisplayFlight({ place, places, quotes, flights, carriers }) {
     quotes === undefined
   )
     return <></>;
+  let inBoundName = FindFlightPortal(place.InboundLeg.DestinationId);
+  let outBoundName = FindFlightPortal(place.OutboundLeg.DestinationId);
+
   return (
     <tr key="">
       <td>{FindCarrier(place.InboundLeg.CarrierIds[0])}</td>
-      <td>{FindFlightPortal(place.InboundLeg.DestinationId)}</td>
+      <td>{inBoundName}</td>
       <td>{place.Direct ? "true" : "false"}</td>
       <td>{FindCarrier(place.OutboundLeg.CarrierIds[0])}</td>
-      <td>{FindFlightPortal(place.OutboundLeg.DestinationId)}</td>
+      <td>{outBoundName}</td>
       <td>{place.MinPrice}</td>
       <td>
-        <button onClick={() => addToCart(place)}>Add to cart</button>
+        <button onClick={() => addToCart(place, inBoundName, outBoundName)}>
+          Add to cart
+        </button>
       </td>
     </tr>
   );
