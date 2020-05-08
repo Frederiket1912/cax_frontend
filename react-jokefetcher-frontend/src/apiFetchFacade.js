@@ -18,9 +18,15 @@ function apiFetchFacade() {
     return fetch(url, options).then(handleHttpErrors);
   };
 
+  const deleteApiCall = (url) => {
+    const options = facade.makeOptions("DELETE", true);
+    return fetch(url, options).then(handleHttpErrors);
+  };
+
   return {
     getApiFetch,
     getApiFetch2,
+    deleteApiCall,
   };
 }
 

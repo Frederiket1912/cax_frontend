@@ -57,7 +57,6 @@ function App({ apiFetchFacade, authFacade }) {
     }
   }, []);
 
-  console.log(role);
   return (
     <CartContextProvider>
       <div className="App">

@@ -15,4 +15,6 @@ export const SupportRegistrationURL =
 
 export const CreateOrderURL = "http://localhost:8080/cax/api/order/create";
 
-export const GetOrderHistoryURL = "TODO";
+export const GetOrderHistoryURL = "http://localhost:8080/cax/api/order/get";
+
+export const CancelOrderURL = "http://localhost:8080/cax/api/order/delete";
