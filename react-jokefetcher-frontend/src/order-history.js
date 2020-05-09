@@ -11,7 +11,6 @@ function OrderHistoryPage({ apiFetchFacade }) {
     apiFetchFacade()
       .getApiFetch(url + "/" + username)
       .then((data) => {
-        console.log("DATA", data);
         setOrderHistory([...data]);
       });
   }, [apiFetchFacade, cancelledOrder]);
@@ -55,6 +54,22 @@ function OrderHistoryPage({ apiFetchFacade }) {
   };
 
   function CancelOrder(order) {
+    for (let i = 0; i < order.listitems.length; i++) {
+      let year = order.listitems[i].dateIn.substring(0, 4);
+      let month = order.listitems[i].dateIn.substring(5, 7);
+      let day = order.listitems[i].dateIn.substring(8);
+      let dateIn = new Date();
+      dateIn.setFullYear(year);
+      dateIn.setMonth(parseInt(month) - 1);
+      dateIn.setDate(parseInt(day) - 2);
+      let today = new Date();
+      if (dateIn.getTime() < today.getTime()) {
+        window.alert(
+          "Something in this order is set to start in less than two days, or has already started. Order cannot be cancelled."
+        );
+        return;
+      }
+    }
     if (window.confirm("Are you sure you want to cancel this order?")) {
       const url = CancelOrderURL;
       apiFetchFacade()
@@ -66,6 +81,7 @@ function OrderHistoryPage({ apiFetchFacade }) {
   }
 
   function DisplayOrders(order) {
+    console.log(order);
     return (
       <div>
         <div className="header2">
