@@ -5,8 +5,7 @@ function AdminCreateUsers({ apiFetchFacade }) {
   let blankUser = { username: "", password: "" };
   const [user, setUser] = useState({ ...blankUser });
   const [role, setRole] = useState("Admin");
-  const [error, setError] = useState("");
-  const [postResponse, setPostResponse] = useState("");
+  const [response, setResponse] = useState("");
 
   function changeHandler(event) {
     const { id, value } = event.target;
@@ -22,16 +21,15 @@ function AdminCreateUsers({ apiFetchFacade }) {
       user.password +
       "/" +
       role;
+
     apiFetchFacade()
       .createUserApi(url)
       .then((data) => {
-        setPostResponse({ ...data });
-        if (data.error) {
-          setError(data.error);
-        } else {
-          setError("ok");
-          setUser(blankUser);
-        }
+        setResponse("ok");
+        setUser(blankUser);
+      })
+      .catch((err) => {
+        setResponse(err.status);
       });
   }
   return (
@@ -65,14 +63,19 @@ function AdminCreateUsers({ apiFetchFacade }) {
       <br></br>
       <br></br>
       <button onClick={submitHandler}>Create user</button>
-      {error === "ok" && (
+      {response === "ok" && (
         <>
           <p>User has been created</p>
         </>
       )}
-      {error !== "ok" && error !== "" && (
+      {response === 400 && (
         <>
           <p>Username already exists</p>
+        </>
+      )}
+      {response === 500 && (
+        <>
+          <p>Something went wrong, please try again later</p>
         </>
       )}
     </div>
