@@ -54,8 +54,8 @@ function ShoppingCartPage() {
             </tr>
           </thead>
           <tbody>
-            {cart.map((cartItem) => (
-              <CartLine cartItem={cartItem} />
+            {cart.map((cartItem, index) => (
+              <CartLine cartItem={cartItem} key={index} />
             ))}
           </tbody>
           <tfoot>

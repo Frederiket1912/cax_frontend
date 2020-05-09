@@ -7,6 +7,7 @@ import FlightPage from "./flight-page";
 import UserRegistrationPage from "./userregister";
 import ShoppingCartPage from "./shopping-cart";
 import OrderHistoryPage from "./order-history";
+import AdminCreateUsers from "./admincreateuser";
 import hotelimg from "./images/hotel.png";
 import planeimg from "./images/plane.png";
 import { CartContext, CartContextProvider } from "./cart-context";
@@ -62,16 +63,17 @@ function App({ apiFetchFacade, authFacade }) {
       <div className="App">
         <Header loggedIn={loggedIn} role={role} logout={logout} />
 
-        {loggedIn && (
+        {loggedIn && role && role.includes("admin") && (
+          <Route exact path="/">
+            <Home history={history} token={token} />
+          </Route>
+        )}
+
+        {loggedIn && role && !role.includes("admin") && (
           <Switch>
             <Route exact path="/">
               <Home history={history} token={token} />
             </Route>
-            {role && role.includes("admin") && (
-              <Route path="/custompage">
-                <Custompage />
-              </Route>
-            )}
             <Route path="/flightpage">
               <FlightPage />
             </Route>
@@ -89,18 +91,27 @@ function App({ apiFetchFacade, authFacade }) {
             </Route>
           </Switch>
         )}
+        {role && role.includes("admin") && (
+          <>
+            <Route path="/create">
+              <AdminCreateUsers apiFetchFacade={apiFetchFacade} />
+            </Route>
+          </>
+        )}
         {!loggedIn && (
-          <Switch>
-            <Route path="/login">
-              <LogIn login={login} />
-            </Route>
-            <Route path="/registration">
-              <UserRegistrationPage apiFetchFacade={apiFetchFacade} />
-            </Route>
-            <Route>
-              <Home token={token} />
-            </Route>
-          </Switch>
+          <>
+            <Switch>
+              <Route exact path="/">
+                <Home history={history} token={token} />
+              </Route>
+              <Route path="/login">
+                <LogIn login={login} />
+              </Route>
+              <Route path="/registration">
+                <UserRegistrationPage apiFetchFacade={apiFetchFacade} />
+              </Route>
+            </Switch>
+          </>
         )}
       </div>
     </CartContextProvider>
@@ -143,16 +154,16 @@ function Header({ role, loggedIn, logout }) {
             Home
           </NavLink>
         </li>
+        {role !== null && role && role.includes("admin") && (
+          <li>
+            <NavLink activeClassName="active" to="/create">
+              Create users
+            </NavLink>
+          </li>
+        )}
 
-        {loggedIn ? (
+        {loggedIn && role && !role.includes("admin") && (
           <>
-            {role !== null && role.includes("admin") && (
-              <li>
-                <NavLink activeClassName="active" to="/custompage">
-                  Custom page
-                </NavLink>
-              </li>
-            )}
             <li>
               <NavLink activeClassName="active" to="/flightpage">
                 Flights
@@ -173,13 +184,16 @@ function Header({ role, loggedIn, logout }) {
                 Order History
               </NavLink>
             </li>
-            <li>
-              <NavLink activeClassName="active" onClick={logout} to="/login">
-                Logout
-              </NavLink>
-            </li>
           </>
-        ) : (
+        )}
+        {loggedIn && (
+          <li>
+            <NavLink activeClassName="active" onClick={logout} to="/login">
+              Logout
+            </NavLink>
+          </li>
+        )}
+        {!loggedIn && (
           <>
             <li>
               <NavLink activeClassName="active" to="/login">
@@ -222,10 +236,14 @@ function Home(props) {
       setRole(decoded.roles);
     }
   }, [token]);
-
   return (
     <div>
-      {role !== "" && (
+      {role && role.includes("admin") && (
+        <div>
+          <h2>Admin page</h2>
+        </div>
+      )}
+      {role !== "" && !role.includes("admin") && (
         <div>
           <br></br>
           <br></br>
@@ -268,12 +286,12 @@ function Home(props) {
   );
 }
 
-function Custompage() {
+/*function Custompage() {
   return (
     <div>
       <h2>Only admins can see this special and important message</h2>
     </div>
   );
-}
+}*/
 
 export default App;
