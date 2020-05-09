@@ -15,7 +15,7 @@ export default function UserRegistrationPage({ apiFetchFacade }) {
   function submitHandler(event) {
     const url = UserRegistrationURL + "/" + user.username + "/" + user.password;
     apiFetchFacade()
-      .getApiFetch3(url)
+      .createUserApi(url)
       .then((data) => {
         setPostResponse({ ...data });
       });

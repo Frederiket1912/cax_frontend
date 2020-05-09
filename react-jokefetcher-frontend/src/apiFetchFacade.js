@@ -18,6 +18,11 @@ function apiFetchFacade() {
     return fetch(url, options).then(handleHttpErrors);
   };
 
+  const createUserApi = (url) => {
+    const options = facade.makeOptions("POST", true);
+    return fetch(url, options).then(handleHttpErrors);
+  };
+
   const deleteApiCall = (url) => {
     const options = facade.makeOptions("DELETE", true);
     return fetch(url, options).then(handleHttpErrors);
@@ -26,6 +31,7 @@ function apiFetchFacade() {
   return {
     getApiFetch,
     getApiFetch2,
+    createUserApi,
     deleteApiCall,
   };
 }
