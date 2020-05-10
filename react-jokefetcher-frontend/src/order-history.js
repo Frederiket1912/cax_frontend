@@ -25,7 +25,7 @@ function OrderHistoryPage({ apiFetchFacade }) {
     }
     return (
       <div className="outerdiv">
-        {orderHistory.map((order) => DisplayOrders(order))}
+        {orderHistory.map((order, index) => DisplayOrders(order, index))}
       </div>
     );
   }
@@ -80,10 +80,10 @@ function OrderHistoryPage({ apiFetchFacade }) {
     }
   }
 
-  function DisplayOrders(order) {
+  function DisplayOrders(order, index) {
     console.log(order);
     return (
-      <div>
+      <div key={index}>
         <div className="header2">
           <table>
             <thead>
@@ -100,15 +100,15 @@ function OrderHistoryPage({ apiFetchFacade }) {
               </tr>
             </thead>
             <tbody>
-              {order.listitems.map((listItem) => (
-                <OrderLine listItem={listItem} />
+              {order.listitems.map((listItem, index) => (
+                <OrderLine listItem={listItem} key={index} />
               ))}
             </tbody>
             <tfoot>
               <tr>
                 <th>Total</th>
                 <th>{TotalPrice(order.listitems)}</th>
-                <tr>{order.cancelled ? "Cancelled" : "Not Cancelled"}</tr>
+                <th>{order.cancelled ? "Cancelled" : "Not Cancelled"}</th>
                 {order.cancelled ? (
                   <th></th>
                 ) : (
