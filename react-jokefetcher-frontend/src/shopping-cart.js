@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { CreateOrderURL } from "./settings";
 import { CartContext } from "./cart-context";
 import apiFetchFacade from "./apiFetchFacade";
 
 let orderPlaced = false;
 function ShoppingCartPage() {
+  // eslint-disable-next-line
   const [response, setResponse] = useState();
   const [emptyCart] = useState([]);
   //const [orderPlaced, setOrderPlaced] = useState(false);

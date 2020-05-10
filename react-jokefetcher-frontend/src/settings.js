@@ -14,6 +14,8 @@ export const SearchHotelsURL = "https://frederiket.dk/cax/api/hotel/searchlist";
 
 //export const CancelOrderURL = "https://frederiket.dk/cax/api/order/delete";
 
+//export const ViewAllOrders = "https://frederiket.dk/cax/api/order/get";
+
 //## DEMO ##
 export const LoginURL = "http://localhost:8080/cax/api/login";
 export const UserRegistrationURL =
@@ -25,3 +27,5 @@ export const CreateOrderURL = "http://localhost:8080/cax/api/order/create";
 export const GetOrderHistoryURL = "http://localhost:8080/cax/api/order/get";
 
 export const CancelOrderURL = "http://localhost:8080/cax/api/order/delete";
+
+export const ViewAllOrders = "http://localhost:8080/cax/api/order/get";

@@ -8,9 +8,10 @@ import UserRegistrationPage from "./userregister";
 import ShoppingCartPage from "./shopping-cart";
 import OrderHistoryPage from "./order-history";
 import AdminCreateUsers from "./admincreateuser";
+import AdminViewAllOrders from "./allorders";
 import hotelimg from "./images/hotel.png";
 import planeimg from "./images/plane.png";
-import { CartContext, CartContextProvider } from "./cart-context";
+import { CartContextProvider } from "./cart-context";
 
 function App({ apiFetchFacade, authFacade }) {
   let token = localStorage.getItem("jwtToken");
@@ -20,7 +21,6 @@ function App({ apiFetchFacade, authFacade }) {
   );
   const [role, setRole] = useState("");
   const history = useHistory();
-  const theme = useState();
 
   const logout = () => {
     authFacade.logout();
@@ -96,6 +96,9 @@ function App({ apiFetchFacade, authFacade }) {
             <Route path="/create">
               <AdminCreateUsers apiFetchFacade={apiFetchFacade} />
             </Route>
+            <Route path="/vieworders">
+              <AdminViewAllOrders apiFetchFacade={apiFetchFacade} />
+            </Route>
           </>
         )}
         {!loggedIn && (
@@ -155,11 +158,18 @@ function Header({ role, loggedIn, logout }) {
           </NavLink>
         </li>
         {role !== null && role && role.includes("admin") && (
-          <li>
-            <NavLink activeClassName="active" to="/create">
-              Create users
-            </NavLink>
-          </li>
+          <>
+            <li>
+              <NavLink activeClassName="active" to="/create">
+                Create users
+              </NavLink>
+            </li>
+            <li>
+              <NavLink activeClassName="active" to="/vieworders">
+                View Orders
+              </NavLink>
+            </li>
+          </>
         )}
 
         {loggedIn && role && !role.includes("admin") && (
