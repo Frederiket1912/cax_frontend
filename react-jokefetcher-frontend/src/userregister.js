@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { UserRegistrationURL } from "./settings";
 
-export default function UserRegistrationPage({ apiFetchFacade }) {
+export default function UserRegistrationPage({
+  apiFetchFacade,
+  loginCallback,
+}) {
   let blankUser = { username: "", password: "" };
   const [user, setUser] = useState({ ...blankUser });
   const [response, setResponse] = useState("");
+
+  let token = localStorage.getItem("jwtToken");
+  const [loggedIn, setLoggedIn] = useState(
+    token !== undefined && token !== null
+  );
 
   function changeHandler(event) {
     const { id, value } = event.target;
@@ -16,7 +24,8 @@ export default function UserRegistrationPage({ apiFetchFacade }) {
     apiFetchFacade()
       .createUserApi(url)
       .then((data) => {
-        setResponse("ok");
+        //setResponse("ok");
+        loginCallback(user.password, user.username);
       })
       .catch((err) => {
         setResponse(err.status);
@@ -33,7 +42,7 @@ export default function UserRegistrationPage({ apiFetchFacade }) {
           placeholder="Username"
           id="username"
           value={user.username}
-          onChange={changeHandler}
+          onChange={(event) => changeHandler(event)}
         />
       </p>
       <p>
@@ -43,15 +52,10 @@ export default function UserRegistrationPage({ apiFetchFacade }) {
           placeholder="Password"
           id="password"
           value={user.password}
-          onChange={changeHandler}
+          onChange={(event) => changeHandler(event)}
         />
       </p>
-      <button onClick={submitHandler}>Sign Up</button>
-      {response === "ok" && (
-        <>
-          <p>Account has been created</p>
-        </>
-      )}
+      <button onClick={(event) => submitHandler(event)}>Sign Up</button>
       {response === 400 && (
         <>
           <p>Username already exists</p>

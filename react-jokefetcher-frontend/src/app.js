@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Switch, Route, NavLink, useHistory } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,7 +11,7 @@ import AdminCreateUsers from "./admincreateuser";
 import AdminViewAllOrders from "./allorders";
 import hotelimg from "./images/hotel.png";
 import planeimg from "./images/plane.png";
-import { CartContextProvider } from "./cart-context";
+import { CartContextProvider, CartContext } from "./cart-context";
 
 function App({ apiFetchFacade, authFacade }) {
   let token = localStorage.getItem("jwtToken");
@@ -111,7 +111,10 @@ function App({ apiFetchFacade, authFacade }) {
                 <LogIn login={login} />
               </Route>
               <Route path="/registration">
-                <UserRegistrationPage apiFetchFacade={apiFetchFacade} />
+                <UserRegistrationPage
+                  apiFetchFacade={apiFetchFacade}
+                  loginCallback={login}
+                />
               </Route>
             </Switch>
           </>
@@ -295,13 +298,5 @@ function Home(props) {
     </div>
   );
 }
-
-/*function Custompage() {
-  return (
-    <div>
-      <h2>Only admins can see this special and important message</h2>
-    </div>
-  );
-}*/
 
 export default App;
