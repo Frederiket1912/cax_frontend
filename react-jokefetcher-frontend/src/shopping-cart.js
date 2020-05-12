@@ -6,11 +6,16 @@ import apiFetchFacade from "./apiFetchFacade";
 let orderPlaced = false;
 let showDiscountForm = true;
 function ShoppingCartPage() {
+  const onUnload = function (e) {
+    if (cart.length !== 0) {
+      localStorage.setItem("savedshoppingcart", JSON.stringify(cart));
+    }
+  };
+  window.addEventListener("beforeunload", onUnload);
+
   // eslint-disable-next-line
   const [response, setResponse] = useState();
   const [emptyCart] = useState([]);
-  //const [orderPlaced, setOrderPlaced] = useState(false);
-  //let orderPlaced = false;
   const { cart, setCart } = useContext(CartContext);
   const [id, setId] = useState();
   const [name, setName] = useState();
@@ -46,6 +51,7 @@ function ShoppingCartPage() {
       });
     setCart(emptyCart);
     orderPlaced = true;
+    localStorage.removeItem("savedshoppingcart");
   }
 
   function updateCartPrice(discount, id, name, code) {
@@ -70,6 +76,14 @@ function ShoppingCartPage() {
   }
 
   if (orderPlaced === true) return <h2>Order has been placed</h2>;
+
+  function RecoverOrders() {
+    let test = JSON.parse(localStorage.getItem("savedshoppingcart"));
+    setCart(test);
+  }
+  if (cart.length === 0 && localStorage.getItem("savedshoppingcart") !== null) {
+    RecoverOrders();
+  } else if (orderPlaced === true) return <h2>Order has been placed</h2>;
   else if (cart.length === 0)
     return <h2>There's currently nothing in your shopping cart</h2>;
   return (
