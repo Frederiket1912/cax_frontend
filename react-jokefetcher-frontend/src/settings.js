@@ -29,3 +29,9 @@ export const GetOrderHistoryURL = "http://localhost:8080/cax/api/order/get";
 export const CancelOrderURL = "http://localhost:8080/cax/api/order/delete";
 
 export const ViewAllOrders = "http://localhost:8080/cax/api/order/get";
+
+export const GetDiscountCodeURL =
+  "http://localhost:8080/cax/api/order/get/discountcode";
+
+export const CreateDiscountCodeURL =
+  "http://localhost:8080/cax/api/order/create/discountcode";

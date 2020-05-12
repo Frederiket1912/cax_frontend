@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
-import { CreateOrderURL } from "./settings";
+import React, { useState, useContext, useCallback, useEffect } from "react";
+import { CreateOrderURL, GetDiscountCodeURL } from "./settings";
 import { CartContext } from "./cart-context";
 import apiFetchFacade from "./apiFetchFacade";
 
 let orderPlaced = false;
+let showDiscountForm = true;
 function ShoppingCartPage() {
   // eslint-disable-next-line
   const [response, setResponse] = useState();
@@ -11,6 +12,10 @@ function ShoppingCartPage() {
   //const [orderPlaced, setOrderPlaced] = useState(false);
   //let orderPlaced = false;
   const { cart, setCart } = useContext(CartContext);
+  const [id, setId] = useState();
+  const [name, setName] = useState();
+  const [code, setCode] = useState();
+  const [discount, setDiscount] = useState();
 
   function TotalPrice(cart) {
     if (cart === undefined && cart === null) return undefined;
@@ -25,6 +30,12 @@ function ShoppingCartPage() {
     const body = {
       username: localStorage.getItem("username"),
       listItems: cart,
+      discountCode: {
+        id: id,
+        name: name,
+        discountPercentage: discount,
+        code: code,
+      },
     };
 
     const url = CreateOrderURL;
@@ -37,12 +48,34 @@ function ShoppingCartPage() {
     orderPlaced = true;
   }
 
+  function updateCartPrice(discount, id, name, code) {
+    if (cart.length !== 0) {
+      let updatedPrices = cart.map(
+        (listItem) =>
+          (listItem = {
+            adults: listItem.adults,
+            dateIn: listItem.dateIn,
+            dateOut: listItem.dateOut,
+            name: listItem.name,
+            price: parseInt(listItem.price - (listItem.price / 100) * discount),
+            service: listItem.service,
+          })
+      );
+      setCart(updatedPrices);
+      setId(id);
+      setName(name);
+      setCode(code);
+      setDiscount(discount);
+    }
+  }
+
   if (orderPlaced === true) return <h2>Order has been placed</h2>;
   else if (cart.length === 0)
     return <h2>There's currently nothing in your shopping cart</h2>;
   return (
     <div>
       <div className="header2">
+        <DiscountCodeChecker updateCartPrice={updateCartPrice} />
         <table>
           <thead>
             <tr>
@@ -85,5 +118,85 @@ const CartLine = function ({ cartItem }) {
     </tr>
   );
 };
+
+function DiscountCodeChecker({ updateCartPrice }) {
+  const defaultResponse = {
+    id: "",
+    name: "",
+    discountPercentage: "",
+    code: "",
+  };
+
+  const [discountCode, setDiscountCode] = useState();
+  const [response, setResponse] = useState(defaultResponse);
+  const [error, setError] = useState();
+  //const [codeIsGood, SetCodeIsGood] = useState();
+
+  const handleChange = (event) => {
+    setDiscountCode(event.target.value);
+  };
+
+  function applyDiscountCode(event) {
+    event.preventDefault();
+    apiFetchFacade()
+      .getApiFetch(GetDiscountCodeURL + "/" + discountCode)
+      .then((data) => {
+        setError(200);
+        setResponse({ ...data });
+        showDiscountForm = false;
+      })
+      .catch((err) => {
+        setError(404);
+      });
+  }
+
+  useEffect(() => {
+    if (response.discountPercentage !== "") {
+      updateCartPrice(
+        response.discountPercentage,
+        response.id,
+        response.name,
+        response.code
+      );
+    }
+  }, [response]);
+
+  return (
+    <div>
+      <form onChange={handleChange}>
+        {showDiscountForm && (
+          <>
+            <input
+              type="number"
+              placeholder="Discount Code"
+              id="discountcode"
+            ></input>
+            <button onClick={(event) => applyDiscountCode(event)}>
+              Apply discount code
+            </button>
+          </>
+        )}
+        {error === 404 && (
+          <>
+            <p>Discount code does not exist.</p>
+          </>
+        )}
+        {error === 500 && (
+          <>
+            <p>Something went wrong, please try again later</p>
+          </>
+        )}
+        {error === 200 && (
+          <>
+            <p>
+              Discount code with {response.name} discount has been added to
+              order.
+            </p>
+          </>
+        )}
+      </form>
+    </div>
+  );
+}
 
 export default ShoppingCartPage;

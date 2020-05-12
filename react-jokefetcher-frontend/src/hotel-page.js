@@ -5,6 +5,7 @@ import Rating from "react-rating";
 import { dateFormatter } from "./date-helper";
 import DatePicker from "react-datepicker";
 import { CartContext } from "./cart-context";
+import moment from "moment";
 
 function HotelPage({ apiFetchFacade }) {
   const [hotels, setHotels] = useState("");
@@ -86,20 +87,30 @@ function HotelPage({ apiFetchFacade }) {
             place,
             props.startFormatDate,
             props.endFormatDate,
-            props.peopleCount
+            props.peopleCount,
+            props.startDate,
+            props.endDate
           )
         )}
       </div>
     );
   }
 
-  function DisplayHotel(place, startFormatDate, endFormatDate, peopleCount) {
+  function DisplayHotel(
+    place,
+    startFormatDate,
+    endFormatDate,
+    peopleCount,
+    startDate,
+    endDate
+  ) {
     const { cart, setCart } = useContext(CartContext);
     const addToCart = useCallback(
       (place) => {
         console.log("PLACE", place);
         let newCart = [];
-
+        let startDateMoment = moment(startDate);
+        let endDateMoment = moment(endDate);
         newCart = newCart.concat(cart);
         newCart.push({
           service: "hotel",
@@ -107,7 +118,9 @@ function HotelPage({ apiFetchFacade }) {
           dateIn: startFormatDate,
           dateOut: endFormatDate,
           price:
-            parseInt(place.ratePlan.price.current.substring(1)) * peopleCount,
+            parseInt(place.ratePlan.price.current.substring(1)) *
+            peopleCount *
+            endDateMoment.diff(startDateMoment, "days"),
           adults: peopleCount,
         });
         setCart(newCart);
@@ -167,7 +180,7 @@ function HotelPage({ apiFetchFacade }) {
           />
         </div>
         <div className="date2">
-          Check out date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Check out date:&nbsp;
           <DatePicker
             minDate={new Date()}
             selected={endDate}
@@ -190,6 +203,8 @@ function HotelPage({ apiFetchFacade }) {
         endFormatDate={endFormatDate}
         peopleCount={peopleCount}
         data={hotels.data}
+        startDate={startDate}
+        endDate={endDate}
       />
     </div>
   );
