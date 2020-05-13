@@ -9,6 +9,7 @@ import ShoppingCartPage from "./shopping-cart";
 import OrderHistoryPage from "./order-history";
 import AdminCreateUsers from "./admincreateuser";
 import AdminViewAllOrders from "./allorders";
+import AdminCreateDiscountCode from "./admincreatediscountcode";
 import hotelimg from "./images/hotel.png";
 import planeimg from "./images/plane.png";
 import { CartContextProvider, CartContext } from "./cart-context";
@@ -99,6 +100,9 @@ function App({ apiFetchFacade, authFacade }) {
             <Route path="/vieworders">
               <AdminViewAllOrders apiFetchFacade={apiFetchFacade} />
             </Route>
+            <Route path="/discountcode">
+              <AdminCreateDiscountCode apiFetchFacade={apiFetchFacade} />
+            </Route>
           </>
         )}
         {!loggedIn && (
@@ -170,6 +174,11 @@ function Header({ role, loggedIn, logout }) {
             <li>
               <NavLink activeClassName="active" to="/vieworders">
                 View Orders
+              </NavLink>
+            </li>
+            <li>
+              <NavLink activeClassName="active" to="/discountcode">
+                Create Discount Codes
               </NavLink>
             </li>
           </>

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { CreateOrderURL, GetDiscountCodeURL } from "./settings";
 import { CartContext } from "./cart-context";
 import apiFetchFacade from "./apiFetchFacade";
