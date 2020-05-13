@@ -35,6 +35,16 @@ function AdminViewAllOrders({ apiFetchFacade }) {
         <td>{orders[order].username}</td>
         <td>{TotalPrice(orders[order].listitems)}</td>
         <td>{orders[order].cancelled ? "Cancelled" : "Active"}</td>
+        {orders[order].discountcode ? (
+          <td>{orders[order].discountcode.code}</td>
+        ) : (
+          <td></td>
+        )}
+        {orders[order].discountcode ? (
+          <td>{orders[order].discountcode.discountPercentage}%</td>
+        ) : (
+          <td></td>
+        )}
       </tr>
     );
   };
@@ -47,6 +57,16 @@ function AdminViewAllOrders({ apiFetchFacade }) {
         <td>{ordersSearch[order].username}</td>
         <td>{TotalPrice(ordersSearch[order].listitems)}</td>
         <td>{ordersSearch[order].cancelled ? "Cancelled" : "Active"}</td>
+        {orders[order].discountcode ? (
+          <td>{orders[order].discountcode.code}</td>
+        ) : (
+          <td></td>
+        )}
+        {orders[order].discountcode ? (
+          <td>{orders[order].discountcode.discountPercentage}%</td>
+        ) : (
+          <td></td>
+        )}
       </tr>
     );
   };
@@ -107,6 +127,8 @@ function AdminViewAllOrders({ apiFetchFacade }) {
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </th>
                 <th>Order Status</th>
+                <th>Discount Code</th>
+                <th>Discount Percentage</th>
               </tr>
             </thead>
             <tbody>
@@ -146,6 +168,8 @@ function AdminViewAllOrders({ apiFetchFacade }) {
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </th>
                 <th>Order Status</th>
+                <th>Discount Code</th>
+                <th>Discount Percentage</th>
               </tr>
             </thead>
             <tbody>
