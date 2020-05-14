@@ -37,3 +37,12 @@ export const CreateDiscountCodeURL =
   "http://localhost:8080/cax/api/order/create/discountcode";
 
 export const ChangePWURL = "http://localhost:8080/cax/api/register/changepw";
+
+//Support
+export const CreateSupportTicket =
+  "http://localhost:8080/cax/api/ticket/create";
+export const ReplySupportTicket = "http://localhost:8080/cax/api/ticket/reply";
+export const CloseSupportTicket = "http://localhost:8080/cax/api/ticket/close/";
+export const GetUserSupportTicket = "http://localhost:8080/cax/api/ticket/";
+export const AllOpenSupportTickets =
+  "http://localhost:8080/cax/api/ticket/open";
