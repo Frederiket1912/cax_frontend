@@ -35,3 +35,5 @@ export const GetDiscountCodeURL =
 
 export const CreateDiscountCodeURL =
   "http://localhost:8080/cax/api/order/create/discountcode";
+
+export const ChangePWURL = "http://localhost:8080/cax/api/register/changepw";

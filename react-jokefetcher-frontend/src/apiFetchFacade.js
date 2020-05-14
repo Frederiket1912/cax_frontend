@@ -28,11 +28,17 @@ function apiFetchFacade() {
     return fetch(url, options).then(handleHttpErrors);
   };
 
+  const putApiCall = (Body, url) => {
+    const options = facade.makeOptions("PUT", true, Body);
+    return fetch(url, options).then(handleHttpErrors);
+  };
+
   return {
     getApiFetch,
     getApiFetch2,
     createUserApi,
     deleteApiCall,
+    putApiCall,
   };
 }
 

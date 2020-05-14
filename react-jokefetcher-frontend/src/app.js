@@ -12,6 +12,7 @@ import AdminViewAllOrders from "./allorders";
 import AdminCreateDiscountCode from "./admincreatediscountcode";
 import User_support_ticket from "./user-support_ticket";
 import Support_support_ticket from "./support-support_ticket";
+import PasswordChange from "./changepw";
 import hotelimg from "./images/hotel.png";
 import planeimg from "./images/plane.png";
 import { CartContextProvider, CartContext } from "./cart-context";
@@ -94,6 +95,9 @@ function App({ apiFetchFacade, authFacade }) {
               </Route>
               <Route path="/support">
                 <User_support_ticket apiFetchFacade={apiFetchFacade} />
+              </Route>
+              <Route path="/changepw">
+                <PasswordChange apiFetchFacade={apiFetchFacade} />
               </Route>
               <Route>
                 <NoMatch />
@@ -236,6 +240,11 @@ function Header({ role, loggedIn, logout }) {
               <li>
                 <NavLink activeClassName="active" to="/support">
                   Support
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/changepw">
+                  Change Password
                 </NavLink>
               </li>
             </>
