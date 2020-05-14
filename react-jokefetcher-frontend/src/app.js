@@ -10,6 +10,8 @@ import OrderHistoryPage from "./order-history";
 import AdminCreateUsers from "./admincreateuser";
 import AdminViewAllOrders from "./allorders";
 import AdminCreateDiscountCode from "./admincreatediscountcode";
+import User_support_ticket from "./user-support_ticket";
+import Support_support_ticket from "./support-support_ticket";
 import hotelimg from "./images/hotel.png";
 import planeimg from "./images/plane.png";
 import { CartContextProvider, CartContext } from "./cart-context";
@@ -70,28 +72,34 @@ function App({ apiFetchFacade, authFacade }) {
           </Route>
         )}
 
-        {loggedIn && role && !role.includes("admin") && (
-          <Switch>
-            <Route exact path="/">
-              <Home history={history} token={token} />
-            </Route>
-            <Route path="/flightpage">
-              <FlightPage />
-            </Route>
-            <Route path="/hotelpage">
-              <HotelPage apiFetchFacade={apiFetchFacade} />
-            </Route>
-            <Route path="/shoppingcart">
-              <ShoppingCartPage apiFetchFacade={apiFetchFacade} />
-            </Route>
-            <Route path="/orderhistory">
-              <OrderHistoryPage apiFetchFacade={apiFetchFacade} />
-            </Route>
-            <Route>
-              <NoMatch />
-            </Route>
-          </Switch>
-        )}
+        {loggedIn &&
+          role &&
+          !role.includes("admin") &&
+          !role.includes("support") && (
+            <Switch>
+              <Route exact path="/">
+                <Home history={history} token={token} />
+              </Route>
+              <Route path="/flightpage">
+                <FlightPage />
+              </Route>
+              <Route path="/hotelpage">
+                <HotelPage apiFetchFacade={apiFetchFacade} />
+              </Route>
+              <Route path="/shoppingcart">
+                <ShoppingCartPage apiFetchFacade={apiFetchFacade} />
+              </Route>
+              <Route path="/orderhistory">
+                <OrderHistoryPage apiFetchFacade={apiFetchFacade} />
+              </Route>
+              <Route path="/support">
+                <User_support_ticket apiFetchFacade={apiFetchFacade} />
+              </Route>
+              <Route>
+                <NoMatch />
+              </Route>
+            </Switch>
+          )}
         {role && role.includes("admin") && (
           <>
             <Route path="/create">
@@ -102,6 +110,13 @@ function App({ apiFetchFacade, authFacade }) {
             </Route>
             <Route path="/discountcode">
               <AdminCreateDiscountCode apiFetchFacade={apiFetchFacade} />
+            </Route>
+          </>
+        )}
+        {role && role.includes("support") && (
+          <>
+            <Route path="/viewticket">
+              <Support_support_ticket apiFetchFacade={apiFetchFacade} />
             </Route>
           </>
         )}
@@ -183,31 +198,48 @@ function Header({ role, loggedIn, logout }) {
             </li>
           </>
         )}
-
-        {loggedIn && role && !role.includes("admin") && (
+        {role !== null && role && role.includes("support") && (
           <>
             <li>
-              <NavLink activeClassName="active" to="/flightpage">
-                Flights
-              </NavLink>
-            </li>
-            <li>
-              <NavLink activeClassName="active" to="/hotelpage">
-                Hotels
-              </NavLink>
-            </li>
-            <li>
-              <NavLink activeClassName="active" to="/shoppingcart">
-                Shopping Cart
-              </NavLink>
-            </li>
-            <li>
-              <NavLink activeClassName="active" to="/orderhistory">
-                Order History
+              <NavLink activeClassName="active" to="/viewticket">
+                View tickets
               </NavLink>
             </li>
           </>
         )}
+
+        {loggedIn &&
+          role &&
+          !role.includes("admin") &&
+          !role.includes("support") && (
+            <>
+              <li>
+                <NavLink activeClassName="active" to="/flightpage">
+                  Flights
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/hotelpage">
+                  Hotels
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/shoppingcart">
+                  Shopping Cart
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/orderhistory">
+                  Order History
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/support">
+                  Support
+                </NavLink>
+              </li>
+            </>
+          )}
         {loggedIn && (
           <li>
             <NavLink activeClassName="active" onClick={logout} to="/login">
@@ -263,6 +295,11 @@ function Home(props) {
       {role && role.includes("admin") && (
         <div>
           <h2>Admin page</h2>
+        </div>
+      )}
+      {role && role.includes("support") && (
+        <div>
+          <h2>Support page</h2>
         </div>
       )}
       {role !== "" && !role.includes("admin") && (
