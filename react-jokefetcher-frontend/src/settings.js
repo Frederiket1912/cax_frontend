@@ -17,32 +17,32 @@ export const SearchHotelsURL = "https://frederiket.dk/cax/api/hotel/searchlist";
 //export const ViewAllOrders = "https://frederiket.dk/cax/api/order/get";
 
 //## DEMO ##
-export const LoginURL = "http://localhost:8080/cax/api/login";
+export const LoginURL = "https://frederiket.dk/cax/api/login";
 export const UserRegistrationURL =
-  "http://localhost:8080/cax/api/register/user";
+  "https://frederiket.dk/cax/api/register/user";
 export const AdminRegistrationURL =
-  "http://localhost:8080/cax/api/register/admin";
-export const CreateOrderURL = "http://localhost:8080/cax/api/order/create";
+  "https://frederiket.dk/cax/api/register/admin";
+export const CreateOrderURL = "https://frederiket.dk/cax/api/order/create";
 
-export const GetOrderHistoryURL = "http://localhost:8080/cax/api/order/get";
+export const GetOrderHistoryURL = "https://frederiket.dk/cax/api/order/get";
 
-export const CancelOrderURL = "http://localhost:8080/cax/api/order/delete";
+export const CancelOrderURL = "https://frederiket.dk/cax/api/order/delete";
 
-export const ViewAllOrders = "http://localhost:8080/cax/api/order/get";
+export const ViewAllOrders = "https://frederiket.dk/cax/api/order/get";
 
 export const GetDiscountCodeURL =
-  "http://localhost:8080/cax/api/order/get/discountcode";
+  "https://frederiket.dk/cax/api/order/get/discountcode";
 
 export const CreateDiscountCodeURL =
-  "http://localhost:8080/cax/api/order/create/discountcode";
+  "https://frederiket.dk/cax/api/order/create/discountcode";
 
-export const ChangePWURL = "http://localhost:8080/cax/api/register/changepw";
+export const ChangePWURL = "https://frederiket.dk/cax/api/register/changepw";
 
 //Support
 export const CreateSupportTicket =
-  "http://localhost:8080/cax/api/ticket/create";
-export const ReplySupportTicket = "http://localhost:8080/cax/api/ticket/reply";
-export const CloseSupportTicket = "http://localhost:8080/cax/api/ticket/close/";
-export const GetUserSupportTicket = "http://localhost:8080/cax/api/ticket/";
+  "https://frederiket.dk/cax/api/ticket/create";
+export const ReplySupportTicket = "https://frederiket.dk/cax/api/ticket/reply";
+export const CloseSupportTicket = "https://frederiket.dk/cax/api/ticket/close/";
+export const GetUserSupportTicket = "https://frederiket.dk/cax/api/ticket/";
 export const AllOpenSupportTickets =
-  "http://localhost:8080/cax/api/ticket/open";
+  "https://frederiket.dk/cax/api/ticket/open";

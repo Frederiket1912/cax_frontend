@@ -5,6 +5,7 @@ import { Switch, useRouteMatch, Link, Route } from "react-router-dom";
 function CreateDiscountCode({ apiFetchFacade }) {
   const [discountCodes, setDiscountCodes] = useState([]);
   let { path, url } = useRouteMatch();
+  const [fetch, setFetch] = useState(true);
 
   useEffect(() => {
     const url = GetDiscountCodeURL + "/all";
@@ -13,7 +14,11 @@ function CreateDiscountCode({ apiFetchFacade }) {
       .then((data) => {
         setDiscountCodes(data);
       });
-  }, [apiFetchFacade]);
+  }, [fetch]);
+
+  function updateFetch() {
+    fetch ? setFetch(false) : setFetch(true);
+  }
 
   return (
     <div>
@@ -22,7 +27,9 @@ function CreateDiscountCode({ apiFetchFacade }) {
           <Link to={`${url}/create`}>Create new discount code</Link>
         </li>
         <li>
-          <Link to={`${url}/show`}>Show existing discount codes</Link>
+          <Link to={`${url}/show`} onClick={updateFetch}>
+            Show existing discount codes
+          </Link>
         </li>
       </ul>
 
@@ -111,7 +118,7 @@ function DiscountCodeCreator({ apiFetchFacade }) {
         <br></br>
         <br></br>
         <button onClick={(event) => createNewDiscountCode(event)}>
-          create new discount code
+          Create new discount code
         </button>
       </form>
       {response === 200 && (

@@ -47,7 +47,7 @@ function PasswordChange({ apiFetchFacade }) {
   return (
     <div>
       <h2>Please enter new password twice to change password.</h2>
-      Old Password :&nbsp;&nbsp;
+      New Password :&nbsp;&nbsp;
       <input
         onChange={handleChange}
         type="password"
@@ -56,7 +56,7 @@ function PasswordChange({ apiFetchFacade }) {
         placeholder="Password"
       ></input>{" "}
       <br></br>
-      New Password :&nbsp;
+      New Password :&nbsp;&nbsp;
       <input
         onChange={handleChange}
         type="password"

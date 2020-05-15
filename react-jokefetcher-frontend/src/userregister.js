@@ -25,7 +25,7 @@ export default function UserRegistrationPage({
       .createUserApi(url)
       .then((data) => {
         //setResponse("ok");
-        loginCallback(user.password, user.username);
+        loginCallback(user.username, user.password);
       })
       .catch((err) => {
         setResponse(err.status);
